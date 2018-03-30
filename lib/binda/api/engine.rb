@@ -1,3 +1,6 @@
+require 'graphql'
+require 'graphiql/rails'
+
 module Binda
   module Api
     class Engine < ::Rails::Engine
