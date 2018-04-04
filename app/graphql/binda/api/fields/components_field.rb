@@ -1,7 +1,7 @@
 Binda::Api::Fields::ComponentsField = GraphQL::Field.define do
   name 'components'
 
-  argument :slug, types.String
+  argument :slug, types.String.to_list_type
   argument :structure_slug, types.String
   argument :publish_state, types.String
 
