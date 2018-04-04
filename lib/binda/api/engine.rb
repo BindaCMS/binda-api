@@ -1,3 +1,4 @@
+require 'binda'
 require 'graphql'
 require 'graphiql/rails'
 
