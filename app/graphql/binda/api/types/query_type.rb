@@ -6,4 +6,5 @@ Binda::Api::Types::QueryType = GraphQL::ObjectType.define do
   connection :components_by_structure, Binda::Api::Fields::ComponentsByStructureField
   
   field :component_by_slug, Binda::Api::Fields::ComponentBySlugField
+  field :board_by_slug, Binda::Api::Fields::BoardBySlugField
 end

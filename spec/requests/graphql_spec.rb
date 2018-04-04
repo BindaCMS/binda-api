@@ -45,5 +45,17 @@ describe "GraphQL API" do
     expect(json['data']).to have_key 'components'
     expect(json['data']['components']['edges'].size).to eq(3)
   end
+
+  it "returns a board by its slug" do
+    data = '{
+      board_by_slug(slug: "dashboard"){
+        name
+      }
+    }'
+    post graphql_path(query: data)
+    expect(response).to be_success
+    expect(json['data']).to have_key 'board_by_slug'
+    expect(json['data']['board_by_slug']['name']).to eq 'dashboard'
+  end
 end
 
