@@ -41,7 +41,7 @@ module Binda
           }
         end
 
-        context.field :get_repeater_items, ::Binda::Api::Types::RepeaterType.to_list_type do
+        context.field :repeaters, ::Binda::Api::Types::RepeaterType.to_list_type do
           argument :slug, !context.types.String
 
           resolve ->(obj, args, ctx) {
