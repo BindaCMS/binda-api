@@ -7,4 +7,5 @@ Binda::Api::Types::QueryType = GraphQL::ObjectType.define do
   
   field :component_by_slug, Binda::Api::Fields::ComponentBySlugField
   field :board_by_slug, Binda::Api::Fields::BoardBySlugField
+  field :repeaters, Binda::Api::Fields::RepeatersField
 end
