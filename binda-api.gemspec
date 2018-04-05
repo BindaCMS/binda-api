@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Binda::Api::VERSION
   s.authors     = ["Marco Crepaldi"]
   s.email       = ["marco.crepaldi@gmail.com"]
-  s.homepage    = "Binda::Api"
+  s.homepage    = "lacolonia.studio"
   s.summary     = "Binda plugin that adds a GraphQL api to your applicaiton"
   s.description = ""
   s.license     = "MIT"
