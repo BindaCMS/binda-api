@@ -9,6 +9,22 @@ module Binda
 
         context.field :structure, ::Binda::Api::Types::StructureType
 
+        context.field :get_related_components, ::Binda::Api::Types::ComponentType.to_list_type do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.get_related_components(args[:slug])
+          }
+        end
+
+        context.field :get_related_boards, ::Binda::Api::Types::BoardType.to_list_type do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.get_related_boards(args[:slug])
+          }
+        end
+
         context.field :get_string, ::Binda::Api::Types::TextType do
           argument :slug, !context.types.String
 
