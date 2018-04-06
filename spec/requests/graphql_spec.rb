@@ -4,6 +4,9 @@ describe "GraphQL API" do
   
   before(:context) do
 		@structure = create(:article_structure_with_components_and_fields)
+    @structure.components.each do |component|
+      component.strings.each{|string| string.update(content: "Content of string #{string.field_setting.slug}") }
+    end
 		@component = @structure.components.first
   end
 
@@ -57,5 +60,48 @@ describe "GraphQL API" do
     expect(json['data']).to have_key 'board_by_slug'
     expect(json['data']['board_by_slug']['name']).to eq 'dashboard'
   end
+  
+  it "returns a dynamic string field" do
+    data = '{
+      components{
+        edges{
+          node{
+            id
+            name
+            slug
+            string:get_string(slug: "1-field-setting"){
+              value
+            }
+          }
+        }
+      }
+    }'
+    post graphql_path(query: data)
+    json['data']['components']['edges'].each do |component|
+      expect(component['node']['string']['value']).to eq "Content of string 1-field-setting"
+    end
+  end
+
+  it "returns blank for a dynamic string field that doesn't exist" do
+    data = '{
+      components{
+        edges{
+          node{
+            id
+            name
+            slug
+            string:get_string(slug: "missing-field-setting"){
+              value
+            }
+          }
+        }
+      }
+    }'
+    post graphql_path(query: data)
+    json['data']['components']['edges'].each do |component|
+      expect(component['node']['string']['value']).to eq ""
+    end
+  end
+
 end
 

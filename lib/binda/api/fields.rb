@@ -29,7 +29,11 @@ module Binda
           argument :slug, !context.types.String
 
           resolve ->(obj, args, ctx) {
-            obj.get_string(args[:slug])
+            begin
+              obj.get_string(args[:slug])
+            rescue ArgumentError
+              ""
+            end
           }
         end
 
