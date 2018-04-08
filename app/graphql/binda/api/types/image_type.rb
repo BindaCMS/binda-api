@@ -3,13 +3,13 @@ Binda::Api::Types::ImageType = GraphQL::ObjectType.define do
 
   field :image, types.String do
     resolve ->(obj, args, ctx) do
-      obj.image
+      obj.image.url
     end
   end
 
   field :thumb, types.String do
     resolve ->(obj, args, ctx) do
-      obj.image.thumb
+      obj.image.thumb.url
     end
   end
 
