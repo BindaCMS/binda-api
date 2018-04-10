@@ -2,13 +2,6 @@ module Binda
   module Api
     module Fields
       SHARED_FIELDS = Proc.new do |context|
-        context.field :id, context.types.ID
-        context.field :name, context.types.String
-        context.field :slug, context.types.String
-        context.field :publish_state, context.types.String
-
-        context.field :structure, ::Binda::Api::Types::StructureType
-
         context.field :get_related_components, ::Binda::Api::Types::ComponentType.to_list_type do
           argument :slug, !context.types.String
 
