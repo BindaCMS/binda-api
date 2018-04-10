@@ -82,6 +82,32 @@ describe "GraphQL API" do
     end
   end
 
+  it "returns repeater's dynamic fields" do
+    component = Binda::Component.last
+    repeater = component.repeaters.first
+    string = repeater.strings.first
+    string.update content: "Content of repeater string"
+    data = '{
+      components{
+        edges{
+          node{
+            id
+            slug
+            repeaters(slug: "'+repeater.field_setting.slug+'"){
+              string:get_string(slug: "'+string.field_setting.slug+'"){
+                value
+              }
+            }
+          }
+        }
+      }
+    }'
+    post graphql_path(query: data)
+    component = json['data']['components']['edges'].first['node']
+    expect(component['repeaters'].count).to eq 1
+    expect(component['repeaters'].first['string']['value']).to eq "Content of repeater string"
+  end
+
   it "returns blank for a dynamic string field that doesn't exist" do
     data = '{
       components{
