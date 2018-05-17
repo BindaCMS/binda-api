@@ -62,7 +62,7 @@ module Binda
           argument :slug, !context.types.String
 
           resolve ->(obj, args, ctx) {
-            obj.repeaters.select{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
+            obj.repeaters.order("binda_repeaters.position").select{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
           }
         end
       end
