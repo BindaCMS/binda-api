@@ -50,6 +50,7 @@ describe "GraphQL API" do
   end
 
   it "returns a board by its slug" do
+    
     data = '{
       board_by_slug(slug: "dashboard"){
         name
@@ -128,6 +129,38 @@ describe "GraphQL API" do
     post graphql_path(query: data)
     json['data']['components']['edges'].each do |component|
       expect(component['node']['string']['value']).to eq ""
+    end
+  end
+
+  it "get all choices from a checkbox as a array" do 
+    checkbox_setting = @structure.field_groups.first.field_settings.create({ field_type: "checkbox", name: "A checkbox" })
+    checkbox = Binda::Checkbox.where(
+      fieldable_id: @component.id,
+      field_setting_id: checkbox_setting
+    ).first
+    for i in 0..2
+      choice = checkbox_setting.choices.create({ label: "label #{i}", value: "value #{i}" })
+      checkbox.choices << choice
+    end
+    data = "{
+      components(slug: \"#{@component.slug}\") {
+        edges {
+          node {
+            checkbox_choices: get_checkbox_choices(slug: \"#{checkbox_setting.slug}\") {
+              value
+              label
+            }
+          }
+        }
+      }
+    }"
+    post graphql_path(query: data)
+    edges = json['data']['components']['edges']
+    expect(edges.first['node']['checkbox_choices'].count).to eq(3)
+    edges.each do |edge| 
+      edge['node']['checkbox_choices'].each_with_index do |choice, i|
+        expect(choice['value']).to eq("value #{i}")
+      end
     end
   end
 

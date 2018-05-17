@@ -40,9 +40,9 @@ module Binda
               ""
             end
           }
-        end
+        end 
 
-        context.field :get_radio, ::Binda::Api::Types::RadioType do
+        context.field :get_radio_choice, ::Binda::Api::Types::RadioType do
           argument :slug, !context.types.String
 
           resolve ->(obj, args, ctx) {
@@ -50,11 +50,51 @@ module Binda
           }
         end
 
+        context.field :get_checkbox_choices, ::Binda::Api::Types::CheckboxType.to_list_type do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.get_checkbox_choices(args[:slug])
+          }
+        end
+
+        context.field :get_selection_choice, ::Binda::Api::Types::SelectionType do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.get_selection_choice(args[:slug])
+          }
+        end 
+
         context.field :get_image, ::Binda::Api::Types::ImageType do
           argument :slug, !context.types.String
 
           resolve ->(obj, args, ctx) {
             obj.images.find{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
+          }
+        end
+
+        context.field :get_audio, ::Binda::Api::Types::AudioType do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.audios.find{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
+          }
+        end
+
+        context.field :get_video, ::Binda::Api::Types::VideoType do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.videos.find{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
+          }
+        end 
+
+        context.field :get_svg, ::Binda::Api::Types::SvgType do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.svgs.find{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
           }
         end
 
