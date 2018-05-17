@@ -1,4 +1,4 @@
-# binda_api
+# Binda API
 A GraphQL API for [Binda CMS](http://github.com/lacolonia/binda).
 
 **Binda** is a headless CMS with an intuitive out-of-the-box interface which makes very easy creating application infrastructures. For more info about Binda structure please visit the [official documentation](http://www.rubydoc.info/gems/binda)
@@ -60,12 +60,18 @@ Binda API documentation is integrated in the GraphiQL panel which is accessible 
 ## Absolute URL
 If Binda is using a CDN to store all assets you should already receive a proper absolute URL. If insted you are storing assets inside public folder (see [Carrierwave documentation](https://github.com/carrierwaveuploader/carrierwave#configuring-carrierwave)) Binda API will give you a relative path.
 
-You can fix this issue on your frontend application or if you prefer to do it once and for all you can update the CMS application on which Binda is installed.
+You can fix this issue modify few lines of the CMS application on which Binda is installed.
+
+Assuming that you set a environmental variable `BINDA_ASSET_HOST`
+
+```yaml
+BINDA_ASSET_HOST=http://your.domain.com
+```
 
 Add this line to `config/environments/production.rb`
 
 ```ruby
-config.action_controller.asset_host = ENV['PARAVICINI_ASSET_HOST']
+config.action_controller.asset_host = ENV['BINDA_ASSET_HOST']
 ```
 
 Add also this line to `config/initializers/carrierwave.rb`
