@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 5.1.5"
   s.add_dependency "binda", "~> 0.1"
-  s.add_dependency "graphql",              "1.8.0.pre6"
+  s.add_dependency "graphql",              "1.8.0.pre11"
   s.add_dependency "graphiql-rails",       "~> 1.4"
   s.add_dependency 'rack-cors'
   s.add_dependency 'pg'
