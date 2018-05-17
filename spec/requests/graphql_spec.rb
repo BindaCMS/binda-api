@@ -82,11 +82,13 @@ describe "GraphQL API" do
     end
   end
 
-  it "returns repeater's dynamic fields" do
+  it "returns repeater's dynamic fields ordered by position" do
     component = Binda::Component.last
     repeater = component.repeaters.first
     string = repeater.strings.first
-    string.update content: "Content of repeater string"
+    component.repeaters.create({ field_setting_id: repeater.field_setting.id })
+    component.repeaters.order("position").first.strings.first.update content: "Content of first repeater"
+    component.repeaters.order("position").last.strings.first.update content: "Content of last repeater"
     data = '{
       components{
         edges{
@@ -104,8 +106,8 @@ describe "GraphQL API" do
     }'
     post graphql_path(query: data)
     component = json['data']['components']['edges'].first['node']
-    expect(component['repeaters'].count).to eq 1
-    expect(component['repeaters'].first['string']['value']).to eq "Content of repeater string"
+    expect(component['repeaters'].count).to eq 2
+    expect(component['repeaters'].last['string']['value']).to eq "Content of last repeater"
   end
 
   it "returns blank for a dynamic string field that doesn't exist" do
