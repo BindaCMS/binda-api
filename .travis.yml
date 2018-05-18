@@ -15,7 +15,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   # setup database
-  - cp config/database.yml.travis spec/dummy/config/database.yml
+  - cp config/database.yml.travis spec/test_app/config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
 script:
   - bin/rails db:migrate RAILS_ENV=test
