@@ -1,0 +1,25 @@
+language: ruby
+env:
+  global:
+    - CODECLIMATE_REPO_TOKEN=76cc330cd2c845742c47e8e9a37dbc7168780504c4667023f98a41a9aa97c22f
+    - CC_TEST_REPORTER_ID=76cc330cd2c845742c47e8e9a37dbc7168780504c4667023f98a41a9aa97c22f
+rvm:
+  - 2.3.4
+addons:
+  firefox: "58.0"
+  postgresql: "9.6"
+services:
+  - postgresql
+before_script:
+  # Setup codeclimate test coverage reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  # setup database
+  - cp config/database.yml.travis spec/dummy/config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+script:
+  - bin/rails db:migrate RAILS_ENV=test
+  - bundle exec rspec
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

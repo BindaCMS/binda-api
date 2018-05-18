@@ -3,6 +3,10 @@ A GraphQL API for [Binda CMS](http://github.com/lacolonia/binda).
 
 **Binda** is a headless CMS with an intuitive out-of-the-box interface which makes very easy creating application infrastructures. For more info about Binda structure please visit the [official documentation](http://www.rubydoc.info/gems/binda)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/maintainability)](https://codeclimate.com/github/lacolonia/binda-api/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/test_coverage)](https://codeclimate.com/github/lacolonia/binda-api/test_coverage)
+
 # Quick start
 Install Binda APi via terminal
 
