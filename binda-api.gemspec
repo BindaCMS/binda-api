@@ -18,11 +18,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails",                          "~> 5.1"
   s.add_dependency "binda",                          "~> 0.1.9"
-  s.add_dependency "graphql",                        "~> 1.8.0"
+  s.add_dependency "graphql",                        "~> 1.8"
   s.add_dependency "graphiql-rails",                 "~> 1.4"
   s.add_dependency 'rack-cors',                      "~> 1.0"
   
-  s.add_development_dependency 'pg',                 "~> 1.0.0"
+  s.add_development_dependency 'pg',                 "~> 1.0"
   s.add_development_dependency 'rspec-rails',        ">= 3.5",  "< 3.8"
   s.add_development_dependency 'byebug',             "~> 10.0"
   s.add_development_dependency "factory_bot_rails",  "~> 4.8"
