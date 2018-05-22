@@ -65,13 +65,13 @@ If Binda is using a CDN to store all assets you should already receive a proper 
 
 You can fix this issue modify few lines of the CMS application on which Binda is installed.
 
-Assuming that you set a environmental variable `BINDA_ASSET_HOST`
+Set a environmental variable `BINDA_ASSET_HOST` with your app domain
 
 ```yaml
 BINDA_ASSET_HOST=http://your.domain.com
 ```
 
-Add this line to `config/environments/production.rb`
+Add this line to `config/environments/production.rb` (or to `development.rb` if you are in a development environment)
 
 ```ruby
 config.action_controller.asset_host = ENV['BINDA_ASSET_HOST']
