@@ -6,7 +6,7 @@ A GraphQL API for [Binda CMS](http://github.com/lacolonia/binda).
 [![Maintainability](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/maintainability)](https://codeclimate.com/github/lacolonia/binda-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/test_coverage)](https://codeclimate.com/github/lacolonia/binda-api/test_coverage)
 
-# Quick start
+## Quick start
 Install Binda APi via terminal
 
 ```bash
@@ -25,9 +25,9 @@ Then execute:
 bundle install
 ```
 
-(If you have installed Binda already you can skip next steps)
+(If you have already installed Binda you can skip the following steps)
 
-Setup the database. If you are going to use Postgres set it up now.
+Setup the database credentials and create a database.
 
 To complete binda installation run the installer from terminal. Binda will take you through a short configuration process where you will setup the first user and some basic details.
 
@@ -37,7 +37,7 @@ rails generate binda:install
 
 Now you are good to go. Good job!
 
-# Query
+## Query
 Binda API is based on [GraphQL](https://graphql.org).
 
 Here below an example of a simple query that retrives the name of all `post` components using [Axios](https://github.com/axios/axios) library. 
@@ -57,10 +57,10 @@ axios
 
 This is one of the possible approaces to access Binda content with GraphQL. Feel free to make requests to GraphQL as you prefer.
 
-## GraphiQL and Binda API documentation
+### GraphiQL and Binda API documentation
 Binda API documentation is integrated in the GraphiQL panel which is accessible from `/admin_panel/graphiql`. In your local environment this would be `http://localhost:3000/admin_panel/graphiql` (if you use port 3000).
 
-## Absolute URL
+### Absolute URL
 If Binda is using a CDN to store all assets you should already receive a proper absolute URL. If insted you are storing assets inside public folder (see [Carrierwave documentation](https://github.com/carrierwaveuploader/carrierwave#configuring-carrierwave)) Binda API will give you a relative path.
 
 You can fix this issue modify few lines of the CMS application on which Binda is installed.
@@ -81,4 +81,14 @@ Add also this line to `config/initializers/carrierwave.rb`
 
 ```ruby
 config.asset_host = ActionController::Base.asset_host
+```
+
+### Admin Panel only
+
+If you are setting up a Rails application with Binda API, but you don't want it to handle your frontend interface, then might  be useful to redirect the `/` route to `admin_panel` which is the entry point where the login page is.
+
+To achieve this behaviour add the following line to `config/routes.rb`
+
+```ruby
+root to: redirect('/admin_panel')
 ```
