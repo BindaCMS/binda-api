@@ -16,7 +16,7 @@ Devise.setup do |config|
   # by default. You can change it below and use your own secret key.
   # config.secret_key = 'a8395fa034e067da620d70f7f39ad4765d163e44ce05d5c243393e1bbfdc10f9a464aaf34fcac3291a6746424ea2b9f9564a01c31820e28bf1737c16d139cd5c'
   # binda.hook.1
-  config.secret_key = '4babc62956b648d4c96de9c8738f53f931d5b8a8ec97376c5748f4f0297c70b5fbd9aa0416a89a2b27cc8e7c22f8b2d83d026eb1fdd689af5824d961b8c7b0dc'
+  config.secret_key = 'f1bd41b404304776db97f6c7d65389253b87d68052ec28798442dacfabfe83d2b3d542fc6cc1f3be5d31c77de164f0fa64f8350d2ec2690a9eced7f2be9d5263'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -114,7 +114,7 @@ Devise.setup do |config|
   # Set up a pepper to generate the hashed password.
   # config.pepper = '124ef1b08a92f891a392a9594b868887c945ca8438bd7852f8ac4d91e51f2cc699b8b6c7b12057c0f0e6dc03d04f8ee4eab72278b0f948e2c1e43f8b449c2262'
   # binda.hook.2
-  config.pepper = 'acd39c19a9e9a1d4debe0af6e0b7a17a2e94abc0e4909f2447b004435ff65704eb0be6474ff3959a9afb83df6a2ea71291008effbc33a7469f17d7879e2f8d97'
+  config.pepper = 'dbfeb26f93d78315a61af6669b55dfe4aecee129dd6ce4afc221729feac7e39640ce9f9ecdec3fa13c2eefa1f2217915ad3d6ea447685969a0eb8407b846e438'
 
   # Send a notification email when the user's password is changed
   # config.send_password_change_notification = false
