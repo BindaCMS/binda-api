@@ -4,10 +4,10 @@ class GraphqlController < ApplicationController
   def execute
     variables = ensure_hash(params[:variables])
     query = params[:query]
-    api_key = params[:api_key]
+    api_key = params[:api_key] || variables.delete(:api_key)
     operation_name = params[:operationName]
     context = {
-      current_user: Binda::Api::User.find_by(api_key: api_key)
+      current_user: Binda::ApiUser.find_by(api_key: api_key)
     }
     result = Binda::Api::Schema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
