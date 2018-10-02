@@ -7,8 +7,8 @@ class CreateBindaApiTables < ActiveRecord::Migration[5.0]
     end
 
     create_table :binda_api_authorizations do |t|
-      t.belongs_to :api_user
-      t.belongs_to :structure
+      t.integer :api_user_id, index: true
+      t.integer :structure_id, index: true
       t.timestamps
     end
   end
