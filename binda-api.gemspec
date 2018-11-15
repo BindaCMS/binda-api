@@ -21,7 +21,8 @@ Gem::Specification.new do |s|
   s.add_dependency "graphql",                        "~> 1.8"
   s.add_dependency "graphiql-rails",                 "~> 1.4"
   s.add_dependency 'rack-cors',                      "~> 1.0"
-  
+  s.add_dependency 'deface',                         "~> 1.3"
+
   s.add_development_dependency 'pg',                 "~> 1.0"
   s.add_development_dependency 'rspec-rails',        ">= 3.5",  "< 3.8"
   s.add_development_dependency 'byebug',             "~> 10.0"
