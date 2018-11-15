@@ -7,6 +7,7 @@ A GraphQL API for [Binda CMS](http://github.com/lacolonia/binda).
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/test_coverage)](https://codeclimate.com/github/lacolonia/binda-api/test_coverage)
 
 ## Quick start
+
 Install Binda APi via terminal
 
 ```bash
@@ -25,15 +26,17 @@ Then execute:
 bundle install
 ```
 
-(If you have already installed Binda you can skip the following steps)
+Setup database credentials and create a database.
 
-Setup the database credentials and create a database.
-
-To complete binda installation run the installer from terminal. Binda will take you through a short configuration process where you will setup the first user and some basic details.
+To complete Binda installation run the installer from terminal. Binda will take you through a short configuration process where you will setup the first user and some basic details.
 
 ```bash
 rails generate binda:install
 ```
+
+> Master version only: run `rails generate binda:api:install` after having installed Binda. 
+  
+
 
 Now you are good to go. Good job!
 
@@ -102,3 +105,21 @@ To achieve this behaviour add the following line to `config/routes.rb`
 ```ruby
 root to: redirect('/admin_panel')
 ```
+
+# Testing
+
+If you are testing and you want to submit a PR be aware that Travis (which is responsible for the test validation) will complain if you have a **duplicated migrations**. To avoid this problem run the following command from the gem root:
+
+```bash
+rm -r spec/test_app/migrate
+```  
+
+If you need to update a migration run the following command:
+
+```bash
+cd spec/test_app
+rm -r migrate
+rails generate binda:install
+```  
+
+> Master version only: the above command need to be followed by this as well `rails generate binda:api:install`
