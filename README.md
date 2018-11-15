@@ -108,18 +108,18 @@ root to: redirect('/admin_panel')
 
 # Testing
 
+> IMPORTANT: don't delete/modify the following file `spec/test_app/migrate/00000000000000_create_binda_tables.binda.rb`
+
 If you are testing and you want to submit a PR be aware that Travis (which is responsible for the test validation) will complain if you have a **duplicated migrations**. To avoid this problem run the following command from the gem root:
 
 ```bash
-rm -r spec/test_app/migrate
+rm spec/test_app/migrate/*_create_binda_api_tables.rb
 ```  
 
 If you need to update a migration run the following command:
 
 ```bash
+rm spec/test_app/migrate/*_create_binda_api_tables.rb
 cd spec/test_app
-rm -r migrate
-rails generate binda:install
+rails generate binda:api:install
 ```  
-
-> Master version only: the above command need to be followed by this as well `rails generate binda:api:install`
