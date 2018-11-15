@@ -6,7 +6,8 @@ A GraphQL API for [Binda CMS](http://github.com/lacolonia/binda).
 [![Maintainability](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/maintainability)](https://codeclimate.com/github/lacolonia/binda-api/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d670f30b4635e5d7bb2a/test_coverage)](https://codeclimate.com/github/lacolonia/binda-api/test_coverage)
 
-# Quick start
+## Quick start
+
 Install Binda APi via terminal
 
 ```bash
@@ -25,15 +26,17 @@ Then execute:
 bundle install
 ```
 
-(If you have installed Binda already you can skip next steps)
+Setup database credentials and create a database.
 
-Setup the database. If you are going to use Postgres set it up now.
-
-To complete binda installation run the installer from terminal. Binda will take you through a short configuration process where you will setup the first user and some basic details.
+To complete Binda installation run the installer from terminal. Binda will take you through a short configuration process where you will setup the first user and some basic details.
 
 ```bash
 rails generate binda:install
 ```
+
+> Master version only: run `rails generate binda:api:install` after having installed Binda. 
+  
+
 
 Now you are good to go. Good job!
 
@@ -62,7 +65,7 @@ axios
 
 This is one of the possible approaces to access Binda content with GraphQL. Feel free to make requests to GraphQL as you prefer.
 
-## GraphiQL and Binda API documentation
+### GraphiQL and Binda API documentation
 Binda API documentation is integrated in the GraphiQL panel which is accessible from `/admin_panel/graphiql`. In your local environment this would be `http://localhost:3000/admin_panel/graphiql` (if you use port 3000).
 Since you can't customize request parameters, you should send the API KEY using the `QUERY VARIABLES` panel like this: 
 
@@ -70,18 +73,18 @@ Since you can't customize request parameters, you should send the API KEY using 
 { "api_key": "SECRET-API-KEY" }
 ```
 
-## Absolute URL
+### Absolute URL
 If Binda is using a CDN to store all assets you should already receive a proper absolute URL. If insted you are storing assets inside public folder (see [Carrierwave documentation](https://github.com/carrierwaveuploader/carrierwave#configuring-carrierwave)) Binda API will give you a relative path.
 
 You can fix this issue modify few lines of the CMS application on which Binda is installed.
 
-Assuming that you set a environmental variable `BINDA_ASSET_HOST`
+Set a environmental variable `BINDA_ASSET_HOST` with your app domain
 
 ```yaml
 BINDA_ASSET_HOST=http://your.domain.com
 ```
 
-Add this line to `config/environments/production.rb`
+Add this line to `config/environments/production.rb` (or to `development.rb` if you are in a development environment)
 
 ```ruby
 config.action_controller.asset_host = ENV['BINDA_ASSET_HOST']
@@ -92,3 +95,31 @@ Add also this line to `config/initializers/carrierwave.rb`
 ```ruby
 config.asset_host = ActionController::Base.asset_host
 ```
+
+# Admin Panel only
+
+If you are setting up a Rails application with Binda API, but you don't want it to handle your frontend interface, then might  be useful to redirect the `/` route to `admin_panel` which is the entry point where the login page is.
+
+To achieve this behaviour add the following line to `config/routes.rb`
+
+```ruby
+root to: redirect('/admin_panel')
+```
+
+# Testing
+
+> IMPORTANT: don't delete/modify the following file `spec/test_app/migrate/00000000000000_create_binda_tables.binda.rb`
+
+If you are testing and you want to submit a PR be aware that Travis (which is responsible for the test validation) will complain if you have a **duplicated migrations**. To avoid this problem run the following command from the gem root:
+
+```bash
+rm spec/test_app/migrate/*_create_binda_api_tables.rb
+```  
+
+If you need to update a migration run the following command:
+
+```bash
+rm spec/test_app/migrate/*_create_binda_api_tables.rb
+cd spec/test_app
+rails generate binda:api:install
+```  
