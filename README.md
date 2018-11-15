@@ -37,8 +37,13 @@ rails generate binda:install
 
 Now you are good to go. Good job!
 
-## Query
+# Authorization
+We don't want everything stored inside Binda database to be accessible via API: there might be phone numbers, email addresses, credentials for external services that need to be secret and unaccessible.
+Binda API is only accessible for admin created users, each one with an API KEY and a specific set of accessible contents.
+
+# Query
 Binda API is based on [GraphQL](https://graphql.org).
+A valid API KEY must be sent along every request.
 
 Here below an example of a simple query that retrives the name of all `post` components using [Axios](https://github.com/axios/axios) library. 
 
@@ -46,7 +51,7 @@ Here below an example of a simple query that retrives the name of all `post` com
 axios
 	.post(
 		"http://my.domain.com/graphql",
-		{ query: "{ components(slug: \"post\"){ edges { node { name } } }}" },
+		{ api_key: "SECRET-API-KEY", query: "{ components(slug: \"post\"){ edges { node { name } } }}" },
 		{ headers: { "Content-Type": "application/json" } }
 	)
 	.then(response => response.data)
@@ -59,6 +64,11 @@ This is one of the possible approaces to access Binda content with GraphQL. Feel
 
 ### GraphiQL and Binda API documentation
 Binda API documentation is integrated in the GraphiQL panel which is accessible from `/admin_panel/graphiql`. In your local environment this would be `http://localhost:3000/admin_panel/graphiql` (if you use port 3000).
+Since you can't customize request parameters, you should send the API KEY using the `QUERY VARIABLES` panel like this: 
+
+```javascript
+{ "api_key": "SECRET-API-KEY" }
+```
 
 ### Absolute URL
 If Binda is using a CDN to store all assets you should already receive a proper absolute URL. If insted you are storing assets inside public folder (see [Carrierwave documentation](https://github.com/carrierwaveuploader/carrierwave#configuring-carrierwave)) Binda API will give you a relative path.
@@ -83,7 +93,7 @@ Add also this line to `config/initializers/carrierwave.rb`
 config.asset_host = ActionController::Base.asset_host
 ```
 
-### Admin Panel only
+# Admin Panel only
 
 If you are setting up a Rails application with Binda API, but you don't want it to handle your frontend interface, then might  be useful to redirect the `/` route to `admin_panel` which is the entry point where the login page is.
 

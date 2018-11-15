@@ -10,15 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1) do
+ActiveRecord::Schema.define(version: 20180820095938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "binda_api_authorizations", id: :serial, force: :cascade do |t|
+    t.integer "api_user_id"
+    t.integer "structure_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_user_id"], name: "index_binda_api_authorizations_on_api_user_id"
+    t.index ["structure_id"], name: "index_binda_api_authorizations_on_structure_id"
+  end
+
+  create_table "binda_api_users", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "api_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key"], name: "index_binda_api_users_on_api_key"
+  end
 
   create_table "binda_assets", id: :serial, force: :cascade do |t|
     t.string "type"
     t.string "video"
     t.string "image"
+    t.string "audio"
+    t.string "svg"
     t.integer "field_setting_id"
     t.string "fieldable_type"
     t.integer "fieldable_id"
@@ -120,6 +139,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.text "description"
     t.integer "position"
     t.boolean "required"
+    t.boolean "read_only"
     t.text "default_text"
     t.string "field_type"
     t.integer "field_group_id"
