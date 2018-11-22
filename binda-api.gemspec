@@ -19,7 +19,9 @@ Gem::Specification.new do |s|
   s.add_dependency "rails",                          "~> 5.1"
   s.add_dependency "binda",                          "~> 0.1.9"
   s.add_dependency "graphql",                        "~> 1.8"
-  s.add_dependency "graphiql-rails",                 "~> 1.4"
+  # avoid graphiql-rails 1.5 until this issue is fixed
+  # https://github.com/rmosolgo/graphiql-rails/issues/58
+  s.add_dependency "graphiql-rails",                 "~> 1.4",  "< 1.5"
   s.add_dependency 'rack-cors',                      "~> 1.0"
   s.add_dependency 'deface',                         "~> 1.3"
 
