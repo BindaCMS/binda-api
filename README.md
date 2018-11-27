@@ -122,4 +122,4 @@ If you need to update a migration run the following command:
 rm spec/test_app/migrate/*_create_binda_api_tables.rb
 cd spec/test_app
 rails generate binda:api:install
-```  
+```

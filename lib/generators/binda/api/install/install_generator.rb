@@ -18,7 +18,7 @@ module Binda
         else
           # If there is any previous Binda migration
           if previous_migrations.size != previous_binda_api_migrations.size
-            warn "You have several migrations, please manually delete Binda's ones then run 'rails g binda_api:install' again."
+            warn "You have several migrations, please manually delete Binda's ones then run 'rails g binda:api:install' again."
             warn "Keep in mind that Binda API will place the new migration after the existing ones."
             exit
           else
@@ -29,6 +29,10 @@ module Binda
           end
         end
         rake 'db:migrate'
+      end
+
+      def setup_settings
+        exec 'rails generate binda:api:setup'
       end
     end
   end
