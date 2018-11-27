@@ -30,6 +30,10 @@ module Binda
         end
         rake 'db:migrate'
       end
+
+      def setup_settings
+        exec 'rails generate binda:api:setup'
+      end
     end
   end
 end
