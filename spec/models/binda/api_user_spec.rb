@@ -27,6 +27,15 @@ module Binda
       users = ::Binda::ApiUser.all
       expect(users.last.name).to eq('foo')
     end
+
+    it "has a generator method to create users which are granted access to all existing structures" do
+      STDIN = StringIO.new("bar\n")
+      ::Binda::ApiUser.create_api_user
+      num_of_structures = Structure.all.count
+      users = ::Binda::ApiUser.all
+      expect(users.last.name).to eq('bar')
+      expect(users.last.reload.structures.count).to eq(num_of_structures)
+    end
   end
 end
 

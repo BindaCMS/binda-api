@@ -14,7 +14,13 @@ module Binda
       STDOUT.puts "What is the api user name? [api_user]"
       username = STDIN.gets.strip
       username = 'api_user' if username.blank?
-      ApiUser.create!( name: username )
+      new_user = ApiUser.create!( name: username )
+      puts "User \"#{username}\" successfully created."
+      ::Binda::Structure.all.each do |structure|
+        new_user.structures << structure
+      end
+      new_user.save!
+      puts "User \"#{username}\" has now granted access to all existing structures."
     end
 
     private
