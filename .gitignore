@@ -7,3 +7,6 @@ spec/test_app/log/*.log
 spec/test_app/tmp/
 Gemfile.lock
 .byebug_history
+binda-api*.gem
+.idea
+.ruby-version

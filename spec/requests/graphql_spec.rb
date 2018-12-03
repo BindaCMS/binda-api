@@ -8,9 +8,32 @@ describe "GraphQL API" do
       component.strings.each{|string| string.update(content: "Content of string #{string.field_setting.slug}") }
     end
 		@component = @structure.components.first
+    @authorized_user = create(:api_user)
+    @authorized_user.structures << @structure
+    @unauthorized_user = create(:api_user)
   end
 
-  it "returns structures" do
+
+  it "returns authorized structures" do
+    data = '{
+      structures{
+        edges{
+          node{
+            id
+            name
+          }
+        }
+      }
+    }'
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    
+    expect(response).to be_success
+    expect(json['data']).to have_key 'structures'
+    expect(json['data']['structures']['edges'].size).to eq(1)
+    expect(json['data']['structures']['edges'].first['node']['name']).to eq(@structure.name)
+  end
+
+  it "doesn't return any structure without an apy key" do
     data = '{
       structures{
         edges{
@@ -23,9 +46,7 @@ describe "GraphQL API" do
     }'
     post graphql_path(query: data)
     
-    expect(response).to be_success
-    expect(json['data']).to have_key 'structures'
-    expect(json['data']['structures']['edges'].size).to eq(3)
+    expect(json['data']['structures']['edges'].size).to eq(0)
   end
 
   it "returns components" do
@@ -43,22 +64,57 @@ describe "GraphQL API" do
         }
       }
     }'
-    post graphql_path(query: data)
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
     expect(response).to be_success
     expect(json['data']).to have_key 'components'
     expect(json['data']['components']['edges'].size).to eq(3)
   end
 
+  it "doesn't return components to unauthorized user" do
+    data = '{
+      components{
+        edges{
+          node{
+            id
+            name
+            slug
+            string:get_string(slug: "1-field-setting"){
+              value
+            }
+          }
+        }
+      }
+    }'
+    post graphql_path(query: data, api_key: @unauthorized_user.api_key)
+    expect(response).to be_success
+    expect(json['data']).to have_key 'components'
+    expect(json['data']['components']['edges'].size).to eq(0)
+  end
+
   it "returns a board by its slug" do
+    @authorized_user.structures << Binda::Board.find_by(slug: 'dashboard').structure
+    
     data = '{
       board_by_slug(slug: "dashboard"){
         name
       }
     }'
-    post graphql_path(query: data)
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
     expect(response).to be_success
     expect(json['data']).to have_key 'board_by_slug'
     expect(json['data']['board_by_slug']['name']).to eq 'dashboard'
+  end
+
+  it "doesn't return a board by its slug to an unauthorized user" do
+    data = '{
+      board_by_slug(slug: "dashboard"){
+        name
+      }
+    }'
+    post graphql_path(query: data, api_key: @unauthorized_user.api_key)
+    expect(response).to be_success
+    expect(json['data']).to have_key 'board_by_slug'
+    expect(json['data']['board_by_slug']).to be_nil
   end
   
   it "returns a dynamic string field" do
@@ -76,7 +132,7 @@ describe "GraphQL API" do
         }
       }
     }'
-    post graphql_path(query: data)
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
     json['data']['components']['edges'].each do |component|
       expect(component['node']['string']['value']).to eq "Content of string 1-field-setting"
     end
@@ -104,7 +160,7 @@ describe "GraphQL API" do
         }
       }
     }'
-    post graphql_path(query: data)
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
     component = json['data']['components']['edges'].first['node']
     expect(component['repeaters'].count).to eq 2
     expect(component['repeaters'].last['string']['value']).to eq "Content of last repeater"
@@ -125,9 +181,41 @@ describe "GraphQL API" do
         }
       }
     }'
-    post graphql_path(query: data)
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
     json['data']['components']['edges'].each do |component|
       expect(component['node']['string']['value']).to eq ""
+    end
+  end
+
+  it "get all choices from a checkbox as a array" do 
+    checkbox_setting = @structure.field_groups.first.field_settings.create({ field_type: "checkbox", name: "A checkbox" })
+    checkbox = Binda::Checkbox.where(
+      fieldable_id: @component.id,
+      field_setting_id: checkbox_setting
+    ).first
+    for i in 0..2
+      choice = checkbox_setting.choices.create({ label: "label #{i}", value: "value #{i}" })
+      checkbox.choices << choice
+    end
+    data = "{
+      components(slug: \"#{@component.slug}\") {
+        edges {
+          node {
+            checkbox_choices: get_checkbox_choices(slug: \"#{checkbox_setting.slug}\") {
+              value
+              label
+            }
+          }
+        }
+      }
+    }"
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    edges = json['data']['components']['edges']
+    expect(edges.first['node']['checkbox_choices'].count).to eq(3)
+    edges.each do |edge| 
+      edge['node']['checkbox_choices'].each_with_index do |choice, i|
+        expect(choice['value']).to eq("value #{i}")
+      end
     end
   end
 

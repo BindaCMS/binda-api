@@ -50,6 +50,22 @@ module Binda
           }
         end
 
+        context.field :get_checkbox_choices, ::Binda::Api::Types::CheckboxType.to_list_type do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.get_checkbox_choices(args[:slug])
+          }
+        end
+
+        context.field :get_selection_choice, ::Binda::Api::Types::SelectionType do
+          argument :slug, !context.types.String
+
+          resolve ->(obj, args, ctx) {
+            obj.get_selection_choice(args[:slug])
+          }
+        end 
+
         context.field :get_image, ::Binda::Api::Types::ImageType do
           argument :slug, !context.types.String
 
@@ -71,14 +87,6 @@ module Binda
 
           resolve ->(obj, args, ctx) {
             obj.videos.find{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
-          }
-        end 
-
-        context.field :get_selection_choice, ::Binda::Api::Types::SelectionType do
-          argument :slug, !context.types.String
-
-          resolve ->(obj, args, ctx) {
-            obj.get_selection_choice(args[:slug])
           }
         end 
 

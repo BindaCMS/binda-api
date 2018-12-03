@@ -1,0 +1,28 @@
+<div class="standard-form">
+<%= simple_form_for user do |f| %>
+  <%= f.error_notification %>
+  <%= render 'layouts/binda/form_errors', f: f %>
+  <div class="standard-form--body">
+    <div class="standard-form--container">
+      <div class="standard-form--header">
+        <small>Edit Api User Details</small>
+      </div>
+      <%= f.input :name, label: "Name" %>
+      <%= f.input :api_key, label: "Api Key" if @user.persisted? %>
+      <%= f.association :structures, as: :check_boxes, collection: Binda::Structure.all %>
+    </div>
+  </div>
+  <div class="standard-form--sidebar">
+    <div class="standard-form--header">
+      <small><%= "#{ t :setting }".pluralize.capitalize %></small>
+    </div>
+    <div class="standard-form--container">
+      <div class="standard-form--main-actions">
+        <%= button_tag "<i class=\"fas fa-check\"></i>Save changes".html_safe, { class: 'b-btn b-btn-primary', id: 'save' } %>
+      </div>
+    </div>
+  </div>
+<% end %>
+</div>
+
+

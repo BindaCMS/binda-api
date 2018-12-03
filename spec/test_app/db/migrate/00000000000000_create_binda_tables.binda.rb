@@ -49,6 +49,7 @@ class CreateBindaTables < ActiveRecord::Migration[5.0]
       t.text             :description
       t.integer          :position
       t.boolean          :required
+      t.boolean          :read_only
       t.text             :default_text
       t.string           :field_type
       t.belongs_to       :field_group
@@ -91,6 +92,8 @@ class CreateBindaTables < ActiveRecord::Migration[5.0]
       t.string           :type
       t.string           :video
       t.string           :image
+      t.string           :audio
+      t.string           :svg
       t.belongs_to       :field_setting
       t.references       :fieldable, polymorphic: true, index: true
       t.string           :content_type

@@ -1,5 +1,7 @@
 class Binda::Api::Resolvers::StructuresResolver
   def call(obj, args, ctx = {})
-    Binda::Structure.all
+    user = ctx[:current_user]
+    return [] if user.nil?
+    user.structures
   end
 end
