@@ -3,7 +3,7 @@ require "rails_helper"
 describe "GraphQL API" do
   
   before(:context) do
-		@structure = create(:article_structure_with_components_and_fields)
+		@structure = create(:article_structure_with_components_and_fields_and_categories)
     @structure.components.each do |component|
       component.strings.each{|string| string.update(content: "Content of string #{string.field_setting.slug}") }
     end
@@ -217,6 +217,31 @@ describe "GraphQL API" do
         expect(choice['value']).to eq("value #{i}")
       end
     end
+  end
+
+  it 'gets component category' do
+    first_structure_category = @structure.categories.first
+    expect(@component.categories.length).to eq(0)
+    @component.categories << first_structure_category
+    @component.save!
+
+    data= '{
+      component: component_by_slug(slug: "'+@component.slug+'") {
+        categories: get_categories {
+          id
+          name
+          position
+          slug
+        }    
+      }
+    }'
+
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    categories = json['data']['component']['categories']
+    expect(categories.first['id'].to_i).to eq(first_structure_category['id'])
+    expect(categories.first['name']).to eq(first_structure_category['name'])
+    expect(categories.first['position']).to eq(first_structure_category['position'])
+    expect(categories.first['slug']).to eq(first_structure_category['slug'])
   end
 
 end
