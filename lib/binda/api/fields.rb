@@ -105,6 +105,11 @@ module Binda
             obj.repeaters.order("binda_repeaters.position").select{ |t| t.field_setting_id == ::Binda::FieldSetting.get_id( args[:slug] ) }
           }
         end
+        context.field :get_categories, ::Binda::Api::Types::CategoryType.to_list_type do 
+          resolve ->(obj, args, ctx) {
+            obj.categories.order("binda_categories.position")
+          }
+        end
       end
     end
   end

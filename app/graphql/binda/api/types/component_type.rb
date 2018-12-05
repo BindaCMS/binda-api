@@ -8,6 +8,6 @@ Binda::Api::Types::ComponentType = GraphQL::ObjectType.define do |context|
   context.field :publish_state, context.types.String
   context.field :structure, ::Binda::Api::Types::StructureType
   context.field :position, context.types.Int
-
+  context.field :categories, ::Binda::Api::Types::CategoryType
   ::Binda::Api::Fields::SHARED_FIELDS.call(context)
 end
