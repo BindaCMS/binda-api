@@ -219,6 +219,27 @@ describe "GraphQL API" do
     end
   end
 
+  it 'can get categories from structures' do
+    data= '{
+      structures {
+        edges {
+          node {
+            categories: get_categories {
+              id
+              name
+              position
+              slug
+            }     
+          }
+        }
+      }
+    }'
+
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    edges = json['data']['structures']['edges']
+    expect(edges.first['node']['categories'].count).to be > 0
+  end
+
   it 'gets component category' do
     first_structure_category = @structure.categories.first
     expect(@component.categories.length).to eq(0)
