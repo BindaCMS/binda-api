@@ -91,6 +91,25 @@ describe "GraphQL API" do
     expect(json['data']['components']['edges'].size).to eq(0)
   end
 
+  it 'returns components by structure' do
+    data = '{
+      components_by_structure(structure_slug: "1-structure"){
+        edges{
+          node{
+            id
+            name
+            slug
+          }
+        }
+      }
+    }'    
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    expect(response).to be_success
+    expect(json['data']).to have_key 'components_by_structure'
+    expect(json['data']['components_by_structure']['edges']).to be_kind_of(Array)
+    expect(json['data']['components_by_structure']['edges'][0]['node']).to have_key 'name'
+  end
+
   it "returns a board by its slug" do
     @authorized_user.structures << Binda::Board.find_by(slug: 'dashboard').structure
     
