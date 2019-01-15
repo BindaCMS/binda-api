@@ -3,7 +3,7 @@ require "rails_helper"
 describe "GraphQL API" do
   
   before(:context) do
-		@structure = create(:article_structure_with_components_and_fields)
+		@structure = create(:article_structure_with_components_and_fields_and_categories)
     @structure.components.each do |component|
       component.strings.each{|string| string.update(content: "Content of string #{string.field_setting.slug}") }
     end
@@ -89,6 +89,25 @@ describe "GraphQL API" do
     expect(response).to be_success
     expect(json['data']).to have_key 'components'
     expect(json['data']['components']['edges'].size).to eq(0)
+  end
+
+  it 'returns components by structure' do
+    data = '{
+      components_by_structure(structure_slug: "1-structure"){
+        edges{
+          node{
+            id
+            name
+            slug
+          }
+        }
+      }
+    }'    
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    expect(response).to be_success
+    expect(json['data']).to have_key 'components_by_structure'
+    expect(json['data']['components_by_structure']['edges']).to be_kind_of(Array)
+    expect(json['data']['components_by_structure']['edges'][0]['node']).to have_key 'name'
   end
 
   it "returns a board by its slug" do
@@ -217,6 +236,52 @@ describe "GraphQL API" do
         expect(choice['value']).to eq("value #{i}")
       end
     end
+  end
+
+  it 'can get categories from structures' do
+    data= '{
+      structures {
+        edges {
+          node {
+            categories: get_categories {
+              id
+              name
+              position
+              slug
+            }     
+          }
+        }
+      }
+    }'
+
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    edges = json['data']['structures']['edges']
+    expect(edges.first['node']['categories'].count).to be > 0
+  end
+
+  it 'gets component category' do
+    first_structure_category = @structure.categories.first
+    expect(@component.categories.length).to eq(0)
+    @component.categories << first_structure_category
+    @component.save!
+
+    data= '{
+      component: component_by_slug(slug: "'+@component.slug+'") {
+        categories: get_categories {
+          id
+          name
+          position
+          slug
+        }    
+      }
+    }'
+
+    post graphql_path(query: data, api_key: @authorized_user.api_key)
+    categories = json['data']['component']['categories']
+    expect(categories.first['id'].to_i).to eq(first_structure_category['id'])
+    expect(categories.first['name']).to eq(first_structure_category['name'])
+    expect(categories.first['position']).to eq(first_structure_category['position'])
+    expect(categories.first['slug']).to eq(first_structure_category['slug'])
   end
 
 end
